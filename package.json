@@ -1,0 +1,37 @@
+{
+  "name": "mongo-hello-world",
+  "version": "1.0.0",
+  "description": "Simple hello world using mongo db for phrases",
+  "main": "./src/server.js",
+  "scripts": {
+    "start": "node ./src/server.js",
+    "pretest": "eslint src/*.js --fix && eslint tests/*.js --fix",
+    "test": "jest . --ci  --coverage"
+  },
+  "keywords": [
+    "mongo",
+    "nodejs",
+    "hello-world"
+  ],
+  "author": "Anatoly Litovsky",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.3",
+    "mongodb": "^3.1.1"
+  },
+  "devDependencies": {
+    "eslint": "^5.1.0",
+    "eslint-config-airbnb-base": "^13.0.0",
+    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-jasmine": "^2.10.1",
+    "jest": "^23.4.0",
+    "jest-junit": "^5.1.0",
+    "superagent": "^3.8.3",
+    "supertest": "^3.1.0"
+  },
+  "jest-junit": {
+    "reporters": [
+      "jest-junit"
+    ]
+  }
+}

@@ -37,6 +37,7 @@ class GreetingsDbFactory {
   connect(host) {
     const client = mongo.MongoClient;
     const url = `mongodb://${this.user}:${this.password}@${host}:27017/world`;
+    console.log(url); // eslint-disable-line no-console
     const dbConnectionPromise = new Promise((resolve, reject) => {
       client.connect(url, (err, db) => {
         /* istanbul ignore if */

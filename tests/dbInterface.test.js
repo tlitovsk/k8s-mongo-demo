@@ -5,7 +5,7 @@ test('Connects to the DB and fetch russian text', async () => {
     user: process.env.MONGO_USER,
     password: process.env.MONGO_PASS,
   });
-  await dbFactory.connect();
+  await dbFactory.connect(process.env.MONGO_HOST);
   const { greater } = dbFactory;
   const result = await greater.greet('russian');
   expect(result).toBe('dobrii den');

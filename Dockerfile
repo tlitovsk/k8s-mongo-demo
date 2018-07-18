@@ -11,9 +11,9 @@ RUN curl -s https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add -
 
 # App
 WORKDIR /web
-ADD ./src .
+ADD ./src ./src
 ADD package.json .
 # Install app dependencies
 RUN npm install
 
-ENTRYPOINT ["npm", "start"]
+CMD ["npm", "start"]

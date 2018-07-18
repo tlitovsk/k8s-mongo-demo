@@ -8,8 +8,10 @@ async function main() {
     user: process.env.MONGO_USER,
     password: process.env.MONGO_PASS,
   });
-  await dbFactory.connect('localhost');
+
+  await dbFactory.connect(process.env.MONGO_HOST);
   const { greater } = dbFactory;
+
   const server = new GreetingsServer(greater);
   server.express.listen(PORT, '0.0.0.0', () => {
     console.log(`Running on http://0.0.0.0:${PORT}`); // eslint-disable-line no-console

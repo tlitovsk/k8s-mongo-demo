@@ -4,7 +4,7 @@ const DbFactory = require('./../src/dbInterface.js');
 
 async function createGreeter() {
   const db = new DbFactory({ user: process.env.MONGO_USER, password: process.env.MONGO_PASS });
-  await db.connect('localhost');
+  await db.connect(process.env.MONGO_HOST);
   const { greater } = db;
   return greater;
 }

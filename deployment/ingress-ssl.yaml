@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: greeter-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: prod.devtrails.co.nz
+    http:
+      paths:
+      - path: /micorservice/greeter
+        backend:
+          serviceName: greeter-service
+          servicePort: 8080
+  tls:
+  - secretName: prod-devtrails-crt-secret
+    hosts:
+    - prod.devtrails.co.nz

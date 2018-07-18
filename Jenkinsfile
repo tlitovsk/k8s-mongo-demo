@@ -44,11 +44,13 @@ spec:
                 }
             } , test :{
                 stage('Test'){
-                    env.NODE_ENV = "test"
-                    print "Environment will be : ${env.NODE_ENV}"
                     sh 'node -v'
                     sh 'npm install'
-                    sh 'npm test'
+                    withCredentials([usernamePassword(credentialsId: 'mongo-greeter', passwordVariable: 'MONGO_PASS', usernameVariable: 'MONGO_USER')]) {
+                        env.MONGO_HOST='mongo-mongodb.mongo.svc.cluster.local'
+                        sh 'printenv'
+                        sh 'npm test'
+                    }
                     junit('junit.xml')
                 }
             }

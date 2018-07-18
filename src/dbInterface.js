@@ -28,15 +28,15 @@ class GreetingsDB extends Greetings {
   }
 }
 
-class DataFactory {
+class GreetingsDbFactory {
   constructor(secret) {
     this.user = secret.user;
     this.password = secret.password;
   }
 
-  connect() {
+  connect(host) {
     const client = mongo.MongoClient;
-    const url = `mongodb://${this.user}:${this.password}@localhost:27017/world`;
+    const url = `mongodb://${this.user}:${this.password}@${host}:27017/world`;
     const dbConnectionPromise = new Promise((resolve, reject) => {
       client.connect(url, (err, db) => {
         /* istanbul ignore if */
@@ -67,4 +67,4 @@ class DataFactory {
   }
 }
 
-module.exports = DataFactory;
+module.exports = GreetingsDbFactory;

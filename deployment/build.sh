@@ -6,3 +6,5 @@ kubectl create -f deployment.yaml --namespace=${namespace}
 kubectl create -f service.yaml --namespace=${namespace}
 kubectl create -f prod-cert.yaml --namespace=${namespace}
 kubectl create -f ingress-ssl.yaml --namespace=${namespace}
+
+

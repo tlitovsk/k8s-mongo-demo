@@ -48,7 +48,6 @@ spec:
                     sh 'npm install'
                     withCredentials([usernamePassword(credentialsId: 'mongo-greeter', passwordVariable: 'MONGO_PASS', usernameVariable: 'MONGO_USER')]) {
                         env.MONGO_HOST='mongo-mongodb.mongo.svc.cluster.local'
-                        sh 'printenv'
                         sh 'npm test'
                     }
                     junit('junit.xml')
@@ -70,6 +69,28 @@ spec:
                         currentBuild.result = "SUCCESS"
                         hello_image.push()
                     }
+            }
+            if (env.BRANCH_NAME != 'master') {
+                stage('Integration tests'){
+                        shortCommit = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
+                        testNamespace = "${namespace}-${shortCommit}-${BUILD_NUMBER}"
+                        withCredentials([usernamePassword(credentialsId: 'mongo-greeter', passwordVariable: 'MONGO_PASS', usernameVariable: 'MONGO_USER')]) {
+                            sh  "kubectl delete ns ${testNamespace} || true \
+                                && kubectl create ns ${testNamespace} \
+                                && kubectl create secret generic greeter-mongo --from-literal=username=${MONGO_USER} --from-literal=password=${MONGO_PASS} --namespace=${testNamespace}"   
+                        }
+                        sh "cd deployment \
+                            && sed -i s/ver1/${shortCommit}/ deployment.yaml \
+                            && kubectl create -f service.yaml --namespace=${testNamespace}\
+                            && kubectl create -f deployment.yaml --namespace=${testNamespace}"
+                        sh "sleep 3"
+                        sh "kubectl rollout status deployment/greeter-deployment --namespace=${testNamespace}"
+                        sh "sleep 3"
+                        sh "curl http://greeter-service.${testNamespace}.svc.cluster.local:8080"
+                        sh "curl http://greeter-service.${testNamespace}.svc.cluster.local:8080/russian"
+                        sh "kubectl delete ns ${testNamespace}"
+
+                }
             }
         }
         catch (err) {

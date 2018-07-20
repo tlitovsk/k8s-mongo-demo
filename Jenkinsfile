@@ -91,6 +91,18 @@ spec:
                         sh "kubectl delete ns ${testNamespace}"
 
                 }
+            }else{
+                stage('Deploy')
+                {
+                    shortCommit = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
+                    sh "kubectl get deployments --namespace=${namespace}"
+                    sh "cd deployment \
+                        && sed -i s/ver1/${shortCommit}/ deployment.yaml \
+                        && kubectl apply -f deployment.yaml --namespace=${namespace}"
+                    sh "kubectl rollout status deployment/greeter-deployment --namespace=${namespace}"
+                    sh "curl http://greeter-service.${namespace}.svc.cluster.local:8080"
+                    
+                }
             }
         }
         catch (err) {
